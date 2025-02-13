@@ -24,7 +24,7 @@ namespace WeatherInfo
             Regex regex = new Regex(pattern);
 
             List<double> avg = new();
-            var avgPerDay = new List<double>();
+            var avgPerDay = new Dictionary<string, double>();
 
             var oldDay = "01";
 
@@ -33,6 +33,8 @@ namespace WeatherInfo
                 Match match = regex.Match(line);
 
                 var day = match.Groups[2].Value;
+                var month = match.Groups[1].Value;
+                string date = $"2016-{month}-{day}";
 
                 if (match.Success)
                 {
@@ -40,7 +42,7 @@ namespace WeatherInfo
                     {
                         double avgTempDay = avg.Average();
 
-                        avgPerDay.Add(avgTempDay);
+                        avgPerDay[date] = avgTempDay;
 
                         avg.Clear();
 
@@ -53,19 +55,18 @@ namespace WeatherInfo
                 }
             }
 
-            avgPerDay.Sort();
-            avgPerDay.Reverse();
+            var sortedDays = avgPerDay.OrderByDescending(x => x.Value).ToList();
 
             int index = 0;
 
-            foreach (var hum in avgPerDay)
+            foreach (var day in sortedDays)
             {
-                Console.WriteLine($"{index + 1}: {hum:F1}");
+                Console.WriteLine($"{index + 1}:\t{day.Key} -\t{day.Value:F1}");
                 index++;
             }
 
-            Console.WriteLine($"\n\nHighest {text}: {avgPerDay[0]:F1}");
-            Console.WriteLine($"\nLowest {text}: {avgPerDay[index - 1]:F1}");
+            Console.WriteLine($"\n\nHighest {text}: {sortedDays.First().Key} - {sortedDays.First().Value:F1}");
+            Console.WriteLine($"\nLowest {text}: {sortedDays.Last().Key} - {sortedDays.Last().Value:F1}");
             Console.WriteLine("\n\nEnter to go back.");
             Console.ReadLine();
         }
