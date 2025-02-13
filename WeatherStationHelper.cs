@@ -68,7 +68,7 @@ namespace WeatherInfo
             Console.WriteLine($"\n\nHighest {text}:\t{sortedDays.First().Key}, {sortedDays.First().Value:F1}");         // date is the Key, average data is the Value
             Console.WriteLine($"\nLowest {text}:\t{sortedDays.Last().Key}, {sortedDays.Last().Value:F1}");
             Console.WriteLine("\n\nEnter to go back.");
-            Console.ReadLine();
+            Console.ReadKey();
         }
 
         public static void Mold(string inOrOut)
