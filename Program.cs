@@ -23,7 +23,7 @@ namespace WeatherInfo
                 Console.WriteLine("3 - Show meteorological Winter");
                 Console.WriteLine("4 - Create Text File");
                 Console.WriteLine("5 - Prints ALL data");
-                Console.WriteLine("ESC - Exits the Program");
+                Console.WriteLine("\nESC - Exits the Program");
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
 

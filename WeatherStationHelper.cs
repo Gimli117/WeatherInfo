@@ -18,7 +18,7 @@ namespace WeatherInfo
 
             string text = sortNum == 5 ? "Temperature" : "Humidity";
 
-            Console.WriteLine($"Now showing each day average {text} {inOrOut}, sorted from highest to lowest.\n\n");
+            Console.WriteLine($"List of each day average {text} {inOrOut}, sorted from highest to lowest.\n\n");
 
             string pattern = $@"^2016-(0[6-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([\d]+:[\d]+:[\d]+),({inOrOut.TernaryConversion()}),(-?[\d.]+),([\d]+)$";        // Temp: Group 5. Hum: Group 6
             Regex regex = new Regex(pattern);
@@ -65,8 +65,8 @@ namespace WeatherInfo
                 index++;
             }
 
-            Console.WriteLine($"\n\nHighest {text}: {sortedDays.First().Key} - {sortedDays.First().Value:F1}");         // date is the Key, average data is the Value
-            Console.WriteLine($"\nLowest {text}: {sortedDays.Last().Key} - {sortedDays.Last().Value:F1}");
+            Console.WriteLine($"\n\nHighest {text}:\t{sortedDays.First().Key}, {sortedDays.First().Value:F1}");         // date is the Key, average data is the Value
+            Console.WriteLine($"\nLowest {text}:\t{sortedDays.Last().Key}, {sortedDays.Last().Value:F1}");
             Console.WriteLine("\n\nEnter to go back.");
             Console.ReadLine();
         }
@@ -92,9 +92,9 @@ namespace WeatherInfo
 
             Console.WriteLine("Enter Year (2016)");
             string? year = Console.ReadLine();
-            Console.WriteLine("Enter Month (01-12)");
+            Console.WriteLine("\nEnter Month (01-12)");
             string? month = Console.ReadLine();
-            Console.WriteLine("Enter Day (01-31)");
+            Console.WriteLine("\nEnter Day (01-31)");
             string? day = Console.ReadLine();
 
             if (day == "35")

@@ -19,9 +19,11 @@ namespace WeatherInfo
                 Console.WriteLine("Begin by selecting Outside info or Inside info:\n");
                 Console.WriteLine("1 - Outside");
                 Console.WriteLine("2 - Inside");
-                Console.WriteLine("Q - Return to Main Menu");
+                Console.WriteLine("\nQ - Return to Main Menu");
 
                 ConsoleKeyInfo infoKey = Console.ReadKey(true);
+
+                Console.Clear();
 
                 if (infoKey.Key == ConsoleKey.D1)
                 {
@@ -46,8 +48,6 @@ namespace WeatherInfo
                 }
             }
 
-            Console.Clear();
-
             while (!quit)
             {
                 Console.Clear();
@@ -57,7 +57,7 @@ namespace WeatherInfo
                 Console.WriteLine("2 - Sort Hottest to Coldest day (Average Temp per day)");
                 Console.WriteLine("3 - Sort Dryest to Dampest day (Average Humidity per day)");
                 Console.WriteLine("4 - Sort Least to Most risk for Mold");
-                Console.WriteLine("Q - Return to Main Menu");
+                Console.WriteLine("\nQ - Return to Main Menu");
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
                 ConsoleKey key2 = key.Key;
@@ -71,10 +71,7 @@ namespace WeatherInfo
                         WeatherStationHelper.DateTemp(infoString);
                         break;
 
-                    case ConsoleKey.D2:
-                        WeatherStationHelper.SortTempOrHum(infoString, selectNum);
-                        break;
-
+                    case ConsoleKey.D2:                                                 // If Case 2 is selected, it will fall through to Case 3 since there is no Break
                     case ConsoleKey.D3:
                         WeatherStationHelper.SortTempOrHum(infoString, selectNum);
                         break;
