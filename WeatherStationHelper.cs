@@ -10,72 +10,69 @@ namespace WeatherInfo
 {
     internal class WeatherStationHelper
     {
-        public static void SortHotToCold(string inOrOut)
+        public static void SortTempOrHum(string inOrOut, int num)
         {
+            int sortNum = num == 2 ? 5 : 6;
+
             Console.Clear();
 
-            string text = inOrOut == "Ute" ? "Outside" : "Inside";                                                                      // Ternary Showoff
+            string text = sortNum == 5 ? "Temperature" : "Humidity";
 
-            Console.WriteLine($"Now showing each day average temperature {text}, sorted from coldest to hottest.\n\n");
+            Console.WriteLine($"Now showing each day average {text} {inOrOut}, sorted from highest to lowest.\n\n");
 
-            string pattern = $@"^2016-(0[6-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([\d]+:[\d]+:[\d]+),({inOrOut}),(-?[\d.]+),([\d]+)$";
+            string pattern = $@"^2016-(0[6-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([\d]+:[\d]+:[\d]+),({inOrOut.TernaryConversion()}),(-?[\d.]+),([\d]+)$";
             Regex regex = new Regex(pattern);
 
-            List<double> avgTemp = new();
-            var avgTempPerDay = new List<double>();
+            List<double> avg = new();
+            var avgPerDay = new List<double>();
 
-            var oldTempDay = "01";
+            var oldDay = "01";
 
             foreach (var line in Program.listAllValues)
             {
                 Match match = regex.Match(line);
 
-                var tempDay = match.Groups[2].Value;
+                var day = match.Groups[2].Value;
 
                 if (match.Success)
                 {
-                    if (tempDay != oldTempDay)
+                    if (day != oldDay)
                     {
-                        double avgTempDay = avgTemp.Average();
+                        double avgTempDay = avg.Average();
 
-                        avgTempPerDay.Add(avgTempDay);
+                        avgPerDay.Add(avgTempDay);
 
-                        avgTemp.Clear();
+                        avg.Clear();
 
-                        oldTempDay = match.Groups[2].Value;
+                        oldDay = match.Groups[2].Value;
                     }
-                    else if ((double.TryParse(match.Groups[5].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double temp)))
+                    else if ((double.TryParse(match.Groups[sortNum].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double data)))
                     {
-                        avgTemp.Add(temp);
+                        avg.Add(data);
                     }
                 }
             }
 
-            avgTempPerDay.Sort();
-            avgTempPerDay.Reverse();
+            avgPerDay.Sort();
+            avgPerDay.Reverse();
 
             int index = 0;
 
-            foreach (var temp in avgTempPerDay)
+            foreach (var hum in avgPerDay)
             {
-                Console.WriteLine($"{index+1}: {temp:F1}");
+                Console.WriteLine($"{index + 1}: {hum:F1}");
                 index++;
             }
 
-            Console.WriteLine($"\n\nHottest Day: {avgTempPerDay[0]:F1}");
-            Console.WriteLine($"\nColdest Day: {avgTempPerDay[index-1]:F1}");
+            Console.WriteLine($"\n\nHighest {text}: {avgPerDay[0]:F1}");
+            Console.WriteLine($"\nLowest {text}: {avgPerDay[index - 1]:F1}");
             Console.WriteLine("\n\nEnter to go back.");
             Console.ReadLine();
         }
 
-        public static void SortDryToDamp(string inOrOut)
-        {
-
-        }
-
         public static void Mold(string inOrOut)
         {
-
+            // ((luftfuktighet -78) * (Temp/15))/0,22
         }
 
         public static void DateFall()
@@ -107,7 +104,10 @@ namespace WeatherInfo
                 return;
             }
 
-            string datePattern = $@"^({year}-{month}-{day} [\d]+:[\d]+:[\d]+),({inOrOut}),([\d.]+),([\d]+)$";
+            month = month?.DateConversion();
+            day = day?.DateConversion();
+
+            string datePattern = $@"^({year}-{month}-{day} [\d]+:[\d]+:[\d]+),({inOrOut.TernaryConversion()}),([\d.]+),([\d]+)$";
             Regex regex = new Regex(datePattern);
 
             var filteredData = new List<(double temperature, double humidity)>();
