@@ -55,7 +55,7 @@ namespace WeatherInfo
                 Console.WriteLine($"{infoString} Info.\n\n");
                 Console.WriteLine("1 - Search for Date and see Average Temp & Humidity");
                 Console.WriteLine("2 - Sort Hottest to Coldest day (Average Temp per day)");
-                Console.WriteLine("3 - Sort Dryest to Dampest day (Average Humidity per day)");
+                Console.WriteLine("3 - Sort Dampest to Dryest day (Average Humidity per day)");
                 Console.WriteLine("4 - Sort Least to Most risk for Mold");
                 Console.WriteLine("\nQ - Return to Main Menu");
 
