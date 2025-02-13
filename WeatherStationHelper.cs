@@ -24,7 +24,7 @@ namespace WeatherInfo
             Regex regex = new Regex(pattern);
 
             List<double> avg = new();
-            var avgPerDay = new Dictionary<string, double>();
+            var avgPerDay = new Dictionary<string, double>();                                                           // Dictionary to store Date and Average Value
 
             var oldDay = "01";
 
@@ -34,7 +34,7 @@ namespace WeatherInfo
 
                 var day = match.Groups[2].Value;
                 var month = match.Groups[1].Value;
-                string date = $"2016-{month}-{day}";
+                string date = $"2016-{month}-{day}";                                                                    // The Dictionary Key in order to set the average data for this current date
 
                 if (match.Success)
                 {
@@ -42,7 +42,7 @@ namespace WeatherInfo
                     {
                         double avgTempDay = avg.Average();
 
-                        avgPerDay[date] = avgTempDay;
+                        avgPerDay[date] = avgTempDay;                                                                   // Adds average value for current date
 
                         avg.Clear();
 
@@ -55,7 +55,7 @@ namespace WeatherInfo
                 }
             }
 
-            var sortedDays = avgPerDay.OrderByDescending(x => x.Value).ToList();
+            var sortedDays = avgPerDay.OrderByDescending(x => x.Value).ToList();                                        // Sorts highest to lowest
 
             int index = 0;
 
@@ -65,7 +65,7 @@ namespace WeatherInfo
                 index++;
             }
 
-            Console.WriteLine($"\n\nHighest {text}: {sortedDays.First().Key} - {sortedDays.First().Value:F1}");
+            Console.WriteLine($"\n\nHighest {text}: {sortedDays.First().Key} - {sortedDays.First().Value:F1}");         // date is the Key, average data is the Value
             Console.WriteLine($"\nLowest {text}: {sortedDays.Last().Key} - {sortedDays.Last().Value:F1}");
             Console.WriteLine("\n\nEnter to go back.");
             Console.ReadLine();
