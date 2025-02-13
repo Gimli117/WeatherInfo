@@ -12,7 +12,7 @@ namespace WeatherInfo
     {
         public static void SortTempOrHum(string inOrOut, int num)
         {
-            int sortNum = num == 2 ? 5 : 6;
+            int sortNum = num == 2 ? 5 : 6;                                                                             // If User Input is 2 (avg temp), fetch data from correct Match Group 5
 
             Console.Clear();
 
@@ -20,7 +20,7 @@ namespace WeatherInfo
 
             Console.WriteLine($"Now showing each day average {text} {inOrOut}, sorted from highest to lowest.\n\n");
 
-            string pattern = $@"^2016-(0[6-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([\d]+:[\d]+:[\d]+),({inOrOut.TernaryConversion()}),(-?[\d.]+),([\d]+)$";
+            string pattern = $@"^2016-(0[6-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([\d]+:[\d]+:[\d]+),({inOrOut.TernaryConversion()}),(-?[\d.]+),([\d]+)$";        // Temp: Group 5. Hum: Group 6
             Regex regex = new Regex(pattern);
 
             List<double> avg = new();

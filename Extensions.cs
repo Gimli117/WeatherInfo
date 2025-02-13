@@ -20,7 +20,7 @@ namespace WeatherInfo
         {
             if (int.TryParse(date, out int num))
             {
-                return num.ToString("00");
+                return num.ToString("00");                  // If user input is 1 and not 01, force format to 01
             }
             return date;
         }
