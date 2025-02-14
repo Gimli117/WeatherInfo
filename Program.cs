@@ -51,9 +51,6 @@ namespace WeatherInfo
                         Console.ReadLine();
                         break;
 
-                    case ConsoleKey.D7:
-                        CreateTextFile.AvgTemp();
-                        break;
                     case ConsoleKey.Escape:
                         quit = true;
                         break;

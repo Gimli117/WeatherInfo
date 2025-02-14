@@ -12,72 +12,105 @@ namespace WeatherInfo
     {
         public static void Run()
         {
-            // Average Temperature inside and outside, per month
-
-
-            // Average Humidity inside and outside, per month
-
-            // Average Risk of Mold inside and outside, per month
-
-            // Meteorological Fall and Winter
-
-            // Print the Mold Algorithm
-        }
-
-        public static void AvgTemp()
-        {
-            string pattern = $@"^2016-(0[6-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([\d]+:[\d]+:[\d]+),(\w),(-?[\d.]+),([\d]+)$"; 
-            Regex regex = new Regex(pattern);         
-            var tempHumList = new List<(double temperature, double humidity)>();
-            var avgPerMonth = new Dictionary<string, List<(double temperature, double humidity, double moldRisk)>>();
-
-
-            var oldMonth = "06";
-
-            foreach (var line in Program.listAllValues)
+            if (File.Exists("..\\..\\..\\WeatherReport.txt"))
             {
-                Match match = regex.Match(line);
+                Console.WriteLine("File already exists.");
+                Thread.Sleep(2000);
+                return;
+            }
 
-                var month = match.Groups[1].Value;
-                string date = $"2016-{month}";
+            int firstLoop = 0;
+            string inOrOut = "";
 
-                if(match.Success)
+            while (firstLoop < 2)
+            {
+                if (firstLoop == 0)
                 {
+                    inOrOut = "Inne";
+                }
+                else
+                {
+                    inOrOut = "Ute";
+                }
 
-                    if(oldMonth != month)
+                string pattern = $@"^(2016|2017)-(0[1-4]|0[6-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([\d]+:[\d]+:[\d]+),({inOrOut}),(-?[\d.]+),([\d]+)$";
+                Regex regex = new Regex(pattern);
+                var tempHumList = new List<(double temperature, double humidity)>();
+                var avgPerMonth = new Dictionary<string, List<(double temperature, double humidity, double moldRisk)>>();
+
+                var oldMonth = "06";
+
+                foreach (var line in Program.listAllValues)
+                {
+                    Match match = regex.Match(line);
+
+                    var month = match.Groups[2].Value;
+                    string date = $"2016-{month}";
+                    var oldDate = "";
+
+                    if (match.Success)
                     {
-                        double avgTemp = tempHumList.Average(entry => entry.temperature);
-                        double avgHumidity = tempHumList.Average(entry => entry.humidity);
 
-                        double moldTempFactor = Math.Max(0, (tempHumList.Average(entry => entry.temperature)) / 15);
-                        double moldHumFactor = Math.Max(0, (tempHumList.Average(entry => entry.humidity)) - 78);
+                        if (oldMonth != month)
+                        {
+                            double avgTemp = tempHumList.Average(entry => entry.temperature);
+                            double avgHumidity = tempHumList.Average(entry => entry.humidity);
 
-                        double moldRisk = (moldHumFactor * moldTempFactor) / 0.22;
+                            double moldTempFactor = Math.Max(0, (tempHumList.Average(entry => entry.temperature)) / 15);
+                            double moldHumFactor = Math.Max(0, (tempHumList.Average(entry => entry.humidity)) - 78);
 
- 
-                        avgPerMonth[date].Add((avgTemp, avgHumidity, moldRisk));
+                            double moldRisk = (moldHumFactor * moldTempFactor) / 0.22;
 
-                        tempHumList.Clear();
+                            if (match.Groups[2].Value == "01")
+                            {
+                                oldDate = $"2016-12";
+                            }
+                            else
+                            {
+                                oldDate = $"2016-{int.Parse(month) - 1}";
+                            }
 
-                        oldMonth = match.Groups[1].Value;
+
+
+                            avgPerMonth[oldDate] = new List<(double, double, double)>();
+
+                            avgPerMonth[oldDate].Add((avgTemp, avgHumidity, moldRisk));
+
+                            tempHumList.Clear();
+
+                            oldMonth = match.Groups[2].Value;
+                        }
+                        else if ((double.TryParse(match.Groups[7].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double hum)) && (double.TryParse(match.Groups[6].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double temp)))
+                        {
+                            tempHumList.Add((temp, hum));
+                        }
                     }
-                    else if ((double.TryParse(match.Groups[6].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double hum)) && (double.TryParse(match.Groups[5].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double temp)))
+                }
+                string inOrOutTxt = $"{inOrOut} Info:\n\n";
+
+                File.AppendAllText("..\\..\\..\\WeatherReport.txt", inOrOutTxt);
+
+                foreach (var month in avgPerMonth.Keys)
+                {
+                    foreach (var entry in avgPerMonth[month])
                     {
+                        string monthData = $"Temperature: {entry.temperature:F1}\tHumidity: {entry.humidity:F1}\tRisk of Mold: {entry.moldRisk:F1}\n";
 
-                        tempHumList.Add((temp, hum));
+                        File.AppendAllText("..\\..\\..\\WeatherReport.txt", monthData);
                     }
-                }               
-
+                }
+                firstLoop++;
             }
+            var meteoroDates = WeatherStationHelper.SortTempOrHumOrMold("Outside", 2, true);
 
+            File.AppendAllText("..\\..\\..\\WeatherReport.txt", meteoroDates);
 
-            int index = 0;
-            foreach (var month in avgPerMonth)
-            {
-                Console.WriteLine($"{index + 1}:\t{month.Key:F1} \t {month.Value}");
-                index++;
-            }
-            Console.ReadKey(true);
+            string moldAlgo = "\n\nMold Algorithm:\t((Humidity - 78) * (Temperature / 15)) / 0.22";
+
+            File.AppendAllText("..\\..\\..\\WeatherReport.txt", moldAlgo);
+
+            Console.WriteLine("Weather Report Successfully Created.");
+            Thread.Sleep(2000);
         }
     }
 }

@@ -74,7 +74,7 @@ namespace WeatherInfo
                     case ConsoleKey.D2:                                                 // If Case 2 is selected, it will fall through to Case 3 since there is no Break
                     case ConsoleKey.D3:
                     case ConsoleKey.D4:
-                        WeatherStationHelper.SortTempOrHumOrMold(infoString, selectNum);
+                        WeatherStationHelper.SortTempOrHumOrMold(infoString, selectNum, false);
                         break;
 
                     case ConsoleKey.Q:

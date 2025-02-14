@@ -1,0 +1,25 @@
+Inne Info:
+
+Temperature: 24,7	Humidity: 28,8	Risk of Mold: 0,0
+Temperature: 26,3	Humidity: 41,6	Risk of Mold: 0,0
+Temperature: 25,6	Humidity: 34,6	Risk of Mold: 0,0
+Temperature: 23,3	Humidity: 41,6	Risk of Mold: 0,0
+Temperature: 22,4	Humidity: 27,3	Risk of Mold: 0,0
+Temperature: 22,8	Humidity: 19,1	Risk of Mold: 0,0
+Temperature: 21,8	Humidity: 15,8	Risk of Mold: 0,0
+Ute Info:
+
+Temperature: 15,8	Humidity: 53,2	Risk of Mold: 0,0
+Temperature: 20,2	Humidity: 53,0	Risk of Mold: 0,0
+Temperature: 18,1	Humidity: 48,6	Risk of Mold: 0,0
+Temperature: 16,2	Humidity: 60,4	Risk of Mold: 0,0
+Temperature: 8,2	Humidity: 64,6	Risk of Mold: 0,0
+Temperature: 3,3	Humidity: 83,5	Risk of Mold: 5,5
+Temperature: 2,5	Humidity: 77,9	Risk of Mold: 0,0
+
+
+Meteorological Fall:	2016-10-09
+
+Almost Winter:		2016-11-10 - 4 days
+
+Mold Algorithm:	((Humidity - 78) * (Temperature / 15)) / 0.22

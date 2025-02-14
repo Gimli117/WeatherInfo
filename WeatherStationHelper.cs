@@ -10,7 +10,7 @@ namespace WeatherInfo
 {
     internal class WeatherStationHelper
     {
-        public static string SortTempOrHumOrMold(string inOrOut, int num)
+        public static string SortTempOrHumOrMold(string inOrOut, int num, bool textCall)
         {
             int sortNum = num == 2 ? 5 : 6;                                                                             // If User Input is 2 (avg temp), fetch data from correct Match Group 5
 
@@ -20,11 +20,13 @@ namespace WeatherInfo
                 mold = true;
             }
 
-            Console.Clear();
-
             string text = sortNum == 5 ? "Temperature" : num == 4 ? "Risk of Mold" : "Humidity";
 
-            Console.WriteLine($"List of each day average {text} {inOrOut}, sorted from highest to lowest.\n\n");
+            if (!textCall)
+            {
+                Console.Clear();
+                Console.WriteLine($"List of each day average {text} {inOrOut}, sorted from highest to lowest.\n\n");
+            }
 
             string pattern = $@"^2016-(0[6-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([\d]+:[\d]+:[\d]+),({inOrOut.TernaryConversion()}),(-?[\d.]+),([\d]+)$";        // Temp: Group 5. Hum: Group 6
             Regex regex = new Regex(pattern);
@@ -127,6 +129,12 @@ namespace WeatherInfo
 
             int index = 0;
 
+            if (textCall)
+            {
+                string winterString = winter == true ? $"\nMeteorological Winter: {winterDate}" : $"\nAlmost Winter:\t\t{winterDay[winterDay.Keys.Max()]} - {winterDay.Keys.Max()} days";
+
+                return "\n\nMeteorological Fall:" + "\t" + fallDate + "\n" + winterString;
+            }
             foreach (var day in sortedDays)
             {
                 Console.WriteLine($"{index + 1}:\t{day.Value:F1}");
@@ -142,8 +150,6 @@ namespace WeatherInfo
                 string winterString = winter == true ? $"\nMeteorological Winter: {winterDate}" : $"\nAlmost Winter: {winterDay[winterDay.Keys.Max()]} - {winterDay.Keys.Max()} days";
 
                 Console.WriteLine(winterString);
-
-                return fallDate + "\n" + winterString;
             }
             Console.WriteLine("\n\nEnter to go back.");
             Console.ReadKey();
