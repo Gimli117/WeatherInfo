@@ -61,7 +61,7 @@ namespace WeatherInfo
 
             foreach (var day in sortedDays)
             {
-                Console.WriteLine($"{index + 1}:\t{day.Key} -\t{day.Value:F1}");
+                Console.WriteLine($"{index + 1}:\t{day.Value:F1}");
                 index++;
             }
 
