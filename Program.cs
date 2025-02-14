@@ -5,9 +5,12 @@ namespace WeatherInfo
     internal class Program
     {
         public static string[] listAllValues = File.ReadAllLines("../../../../WeatherInfo/Tempdata.txt");
+        public delegate void MyDelegate(); 
         static void Main()
         {
             bool quit = false;
+            MyDelegate myDelegate = new MyDelegate(Info.Run);
+            
 
             Console.CursorVisible = false;
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
@@ -30,7 +33,7 @@ namespace WeatherInfo
                 switch (key.Key)
                 {
                     case ConsoleKey.D1:
-                        Info.Run();
+                        myDelegate();
                         break;
 
                     case ConsoleKey.D2:
