@@ -10,7 +10,7 @@ namespace WeatherInfo
 {
     internal class WeatherStationHelper
     {
-        public static void SortTempOrHumOrMold(string inOrOut, int num)
+        public static string SortTempOrHumOrMold(string inOrOut, int num)
         {
             int sortNum = num == 2 ? 5 : 6;                                                                             // If User Input is 2 (avg temp), fetch data from correct Match Group 5
 
@@ -142,9 +142,13 @@ namespace WeatherInfo
                 string winterString = winter == true ? $"\nMeteorological Winter: {winterDate}" : $"\nAlmost Winter: {winterDay[winterDay.Keys.Max()]} - {winterDay.Keys.Max()} days";
 
                 Console.WriteLine(winterString);
+
+                return fallDate + "\n" + winterString;
             }
             Console.WriteLine("\n\nEnter to go back.");
             Console.ReadKey();
+
+            return "";
         }
 
         public static void DateTemp(string inOrOut)
