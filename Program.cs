@@ -19,10 +19,8 @@ namespace WeatherInfo
                 Console.WriteLine("Welcome to the Weather App!\n");
                 Console.WriteLine("Please select a command:\n\n");
                 Console.WriteLine("1 - Info");
-                Console.WriteLine("2 - Show meteorological Fall");
-                Console.WriteLine("3 - Show meteorological Winter");
-                Console.WriteLine("4 - Create Text File");
-                Console.WriteLine("5 - Prints ALL data");
+                Console.WriteLine("2 - Create Text File");
+                Console.WriteLine("3 - Prints ALL data");
                 Console.WriteLine("\nESC - Exits the Program");
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
@@ -36,18 +34,10 @@ namespace WeatherInfo
                         break;
 
                     case ConsoleKey.D2:
-
-                        break;
-
-                    case ConsoleKey.D3:
-
-                        break;
-
-                    case ConsoleKey.D4:
                         CreateTextFile.Run();
                         break;
 
-                    case ConsoleKey.D5:
+                    case ConsoleKey.D3:
                         int index = 1;
                         foreach (var line in listAllValues)
                         {

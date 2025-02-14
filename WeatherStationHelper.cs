@@ -135,11 +135,11 @@ namespace WeatherInfo
 
             Console.WriteLine($"\n\nHighest {text}:\t{sortedDays.First().Key}, {sortedDays.First().Value:F1}");         // date is the Key, average data is the Value
             Console.WriteLine($"\nLowest {text}:\t{sortedDays.Last().Key}, {sortedDays.Last().Value:F1}");
-            if (sortNum == 5)
+            if (sortNum == 5 && inOrOut == "Outside")
             {
                 Console.WriteLine($"\n\nMeteorological Fall: {fallDate}");
 
-                string winterString = winter == true ? $"\nMeteorological Winter: {winterDate}" : $"\nAlmost Winter: {winterDay[winterDay.Keys.Max()]} - {winterDay.Keys.Max()}";
+                string winterString = winter == true ? $"\nMeteorological Winter: {winterDate}" : $"\nAlmost Winter: {winterDay[winterDay.Keys.Max()]} - {winterDay.Keys.Max()} days";
 
                 Console.WriteLine(winterString);
             }
