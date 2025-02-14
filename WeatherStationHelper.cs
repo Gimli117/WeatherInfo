@@ -10,13 +10,19 @@ namespace WeatherInfo
 {
     internal class WeatherStationHelper
     {
-        public static void SortTempOrHum(string inOrOut, int num)
+        public static void SortTempOrHumOrMold(string inOrOut, int num)
         {
             int sortNum = num == 2 ? 5 : 6;                                                                             // If User Input is 2 (avg temp), fetch data from correct Match Group 5
 
+            bool mold = false;
+            if (num == 4)
+            {
+                mold = true;
+            }
+
             Console.Clear();
 
-            string text = sortNum == 5 ? "Temperature" : "Humidity";
+            string text = sortNum == 5 ? "Temperature" : num == 4 ? "Risk of Mold" : "Humidity";
 
             Console.WriteLine($"List of each day average {text} {inOrOut}, sorted from highest to lowest.\n\n");
 
@@ -25,6 +31,15 @@ namespace WeatherInfo
 
             List<double> avg = new();
             var avgPerDay = new Dictionary<string, double>();                                                           // Dictionary to store Date and Average Value
+            var moldData = new List<(double temperature, double humidity)>();
+            int fallCount = 0;
+            int winterCount = 0;
+            bool fall = false;
+            bool winter = false;
+            string fallDate = "";
+            string winterDate = "";
+            double avgDay = 0;
+            var winterDay = new Dictionary<int, string>();
 
             var oldDay = "01";
 
@@ -40,22 +55,75 @@ namespace WeatherInfo
                 {
                     if (day != oldDay)
                     {
-                        double avgTempDay = avg.Average();
+                        if (mold)
+                        {
+                            double moldTempFactor = Math.Max(0, (moldData.Average(entry => entry.temperature)) / 15);
+                            double moldHumFactor = Math.Max(0, (moldData.Average(entry => entry.humidity)) - 78);
 
-                        avgPerDay[date] = avgTempDay;                                                                   // Adds average value for current date
+                            double moldRisk = (moldHumFactor * moldTempFactor) / 0.22;
+
+                            avgPerDay[date] = moldRisk;
+                        }
+                        else
+                        {
+                            avgDay = avg.Average();
+
+                            avgPerDay[date] = avgDay;                                                               // Adds average value for current date
+
+
+                        }
+
+                        if (avgDay < 10 && !fall)           // Fall
+                        {
+                            fallCount++;
+                            if (fallCount == 5)
+                            {
+                                fall = true;
+                                fallDate = date;
+                            }
+                        }
+                        else
+                        {
+                            fallCount = 0;
+                        }
+
+                        if (avgDay < 0 && !winter)          // Winter
+                        {
+                            winterCount++;
+                            if (winterCount == 5)
+                            {
+                                winter = true;
+                                winterDate = date;
+                            }
+                        }
+                        else
+                        {
+                            string oldDate = $"2016-{month}-{int.Parse(day)-1}";    // If there are not 5 "winter" days in a row
+                            winterDay[winterCount] = oldDate;
+                            winterCount = 0;
+                        }
 
                         avg.Clear();
+
+                        moldData.Clear();
 
                         oldDay = match.Groups[2].Value;
                     }
                     else if ((double.TryParse(match.Groups[sortNum].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double data)))
                     {
-                        avg.Add(data);
+                        if (mold && (double.TryParse(match.Groups[5].Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double data2)))
+                        {
+                            moldData.Add((data2, data));
+                        }
+                        else
+                        {
+                            avg.Add(data);
+                        }
                     }
                 }
             }
 
-            var sortedDays = avgPerDay.OrderByDescending(x => x.Value).ToList();                                        // Sorts highest to lowest
+            var sortedDays = avgPerDay.OrderByDescending(x => x.Value).ToList();
 
             int index = 0;
 
@@ -67,23 +135,16 @@ namespace WeatherInfo
 
             Console.WriteLine($"\n\nHighest {text}:\t{sortedDays.First().Key}, {sortedDays.First().Value:F1}");         // date is the Key, average data is the Value
             Console.WriteLine($"\nLowest {text}:\t{sortedDays.Last().Key}, {sortedDays.Last().Value:F1}");
+            if (sortNum == 5)
+            {
+                Console.WriteLine($"\n\nMeteorological Fall: {fallDate}");
+
+                string winterString = winter == true ? $"\nMeteorological Winter: {winterDate}" : $"\nAlmost Winter: {winterDay[winterDay.Keys.Max()]} - {winterDay.Keys.Max()}";
+
+                Console.WriteLine(winterString);
+            }
             Console.WriteLine("\n\nEnter to go back.");
             Console.ReadKey();
-        }
-
-        public static void Mold(string inOrOut)
-        {
-            // ((luftfuktighet -78) * (Temp/15))/0,22
-        }
-
-        public static void DateFall()
-        {
-
-        }
-
-        public static void DateWinter()
-        {
-
         }
 
         public static void DateTemp(string inOrOut)

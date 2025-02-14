@@ -55,7 +55,7 @@ namespace WeatherInfo
                 Console.WriteLine($"{infoString} Info.\n\n");
                 Console.WriteLine("1 - Search for Date and see Average Temp & Humidity");
                 Console.WriteLine("2 - Sort Hottest to Coldest day (Average Temp per day)");
-                Console.WriteLine("3 - Sort Dampest to Dryest day (Average Humidity per day)");
+                Console.WriteLine("3 - Sort Dryest to Dampest day (Average Humidity per day)");
                 Console.WriteLine("4 - Sort Least to Most risk for Mold");
                 Console.WriteLine("\nQ - Return to Main Menu");
 
@@ -73,11 +73,8 @@ namespace WeatherInfo
 
                     case ConsoleKey.D2:                                                 // If Case 2 is selected, it will fall through to Case 3 since there is no Break
                     case ConsoleKey.D3:
-                        WeatherStationHelper.SortTempOrHum(infoString, selectNum);
-                        break;
-
                     case ConsoleKey.D4:
-                        WeatherStationHelper.Mold(infoString);
+                        WeatherStationHelper.SortTempOrHumOrMold(infoString, selectNum);
                         break;
 
                     case ConsoleKey.Q:
