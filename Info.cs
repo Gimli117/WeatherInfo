@@ -67,7 +67,7 @@ namespace WeatherInfo
 
                 switch (key.Key)
                 {
-                    case ConsoleKey.D1:
+                    case (ConsoleKey.D1):
                         WeatherStationHelper.DateTemp(infoString);
                         break;
 
