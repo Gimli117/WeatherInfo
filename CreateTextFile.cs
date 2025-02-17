@@ -86,7 +86,15 @@ namespace WeatherInfo
                         }
                     }
                 }
-                string inOrOutTxt = $"{inOrOut} Info:\n\n";
+                string inOrOutTxt = "";
+                if (firstLoop == 1)
+                {
+                    inOrOutTxt = $"\n\n{inOrOut} Info:\n\n";
+                }
+                else
+                {
+                    inOrOutTxt = $"{inOrOut} Info:\n\n";
+                }
 
                 File.AppendAllText("..\\..\\..\\WeatherReport.txt", inOrOutTxt);
 
@@ -94,7 +102,7 @@ namespace WeatherInfo
                 {
                     foreach (var entry in avgPerMonth[month])
                     {
-                        string monthData = $"Temperature: {entry.temperature:F1}\tHumidity: {entry.humidity:F1}\tRisk of Mold: {entry.moldRisk:F1}\n";
+                        string monthData = $"Month: {month}\t\tTemperature: {entry.temperature:F1}\tHumidity: {entry.humidity:F1}\t\tRisk of Mold: {entry.moldRisk:F1}\n";
 
                         File.AppendAllText("..\\..\\..\\WeatherReport.txt", monthData);
                     }
