@@ -81,7 +81,7 @@ namespace WeatherInfo
                             if (fallCount == 5)
                             {
                                 fall = true;
-                                fallDate = date;
+                                fallDate = $"2016-{month}-{int.Parse(day)-fallCount}";
                             }
                         }
                         else
@@ -100,7 +100,7 @@ namespace WeatherInfo
                         }
                         else
                         {
-                            string oldDate = $"2016-{month}-{int.Parse(day)-1}";    // If there are not 5 "winter" days in a row
+                            string oldDate = $"2016-{month}-{int.Parse(day)-winterCount}";    // If there are not 5 "winter" days in a row
                             winterDay[winterCount] = oldDate;
                             winterCount = 0;
                         }
